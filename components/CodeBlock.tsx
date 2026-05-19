@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-markup-templating';
 import 'prismjs/components/prism-php';
@@ -12,12 +12,29 @@ interface CodeBlockProps {
 }
 
 export default function CodeBlock({ code, language }: CodeBlockProps) {
-  const highlightedCode = useMemo(() => {
+  const [highlightedCode, setHighlightedCode] = useState(() => {
+    // Escape HTML in initial SSR state so it safely renders as text
+    return code
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  });
+
+  useEffect(() => {
     try {
       const grammar = Prism.languages[language] || Prism.languages.markup;
-      return Prism.highlight(code, grammar, language);
+      const highlighted = Prism.highlight(code, grammar, language);
+      setHighlightedCode(highlighted);
     } catch (e) {
-      return code; // fallback
+      setHighlightedCode(code
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;")
+      );
     }
   }, [code, language]);
 
