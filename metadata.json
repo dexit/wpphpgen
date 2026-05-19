@@ -1,0 +1,5 @@
+{
+  "name": "WP Route Architect",
+  "description": "A UI-driven generator for WordPress custom REST API endpoints.",
+  "requestFramePermissions": []
+}
