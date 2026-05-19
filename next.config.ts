@@ -2,6 +2,14 @@ import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  experimental: {
+    // @ts-ignore - explicitly configure allowedDevOrigins to fix cors warning
+    allowedDevOrigins: [
+      'ais-dev-k365ucywmyppdx4hnlvwzs-30061549595.europe-west1.run.app',
+      'ais-pre-k365ucywmyppdx4hnlvwzs-30061549595.europe-west1.run.app',
+      'localhost:3000',
+    ],
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
